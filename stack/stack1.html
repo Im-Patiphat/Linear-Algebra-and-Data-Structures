@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Drag and Drop Stack Game</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div id="stack-container"></div>
+    <div class="">
+      <p id="Empty">Empty:</p>
+      <p id="count">Count:</p>
+      <p id="isFull">Is Full:</p>
+      <p id="peek">Peek:</p>
+    </div>
+
+    <div id="block-container">
+      <div class="block" draggable="true"></div>
+      <div class="blocks" draggable="true"></div>
+      <!-- เพิ่ม block เพิ่มเติมตามต้องการ -->
+    </div>
+
+    <script>
+      function isEmpty(container) {
+        return container.children.length === 0;
+      }
+
+      function isFull(container, maxBlocks) {
+        return container.children.length >= maxBlocks;
+      }
+
+      function count(container) {
+        return container.children.length;
+      }
+
+      function peek(container) {
+        const lastBlock = container.lastChild;
+        return lastBlock ? lastBlock.textContent : null;
+      }
+
+      const stackContainer = document.getElementById("stack-container");
+      const block = document.querySelector(".block");
+      const blocks = document.querySelector(".blocks");
+      const maxBlocks = 5; // กำหนดจำนวนบล็อกที่ต้องการให้ stack-container รองรับ
+      // เพิ่ม MutationObserver
+      const observer = new MutationObserver(() => {
+        updateResult();
+      });
+      const peekElement = document.getElementById("peek");
+
+      peekElement.addEventListener("click", () => {
+        const peekResult = peek(stackContainer);
+        alert(`Peek Result: ${peekResult}`);
+      });
+
+      // กำหนดคอนฟิก MutationObserver
+      const config = { childList: true, subtree: true };
+
+      block.addEventListener("dragstart", (e) => {
+        e.dataTransfer.setData("text/plain", "block");
+      });
+
+      blocks.addEventListener("dragstart", (e) => {
+        e.dataTransfer.setData("text/plain", "blocks");
+      });
+
+      stackContainer.addEventListener("dragover", (e) => {
+        e.preventDefault(); // ต้องป้องกันการเกิดเหตุการณ์นี้เพื่อให้สามารถวางได้
+      });
+
+      stackContainer.addEventListener("drop", (e) => {
+        e.preventDefault();
+        const data = e.dataTransfer.getData("text/plain");
+        if (data === "block" || data === "blocks") {
+          if (!isFull(stackContainer, maxBlocks)) {
+            const newBlock =
+              data === "block" ? block.cloneNode(true) : blocks.cloneNode(true);
+            stackContainer.appendChild(newBlock);
+            maxBlocks++; // เพิ่ม maxBlocks ทุกครั้งที่เพิ่มบล็อก
+            updateResult();
+          } else {
+            alert("Stack is full! Cannot add more blocks.");
+          }
+        }
+      });
+
+      stackContainer.addEventListener("dblclick", (e) => {
+        if (
+          e.target.classList.contains("block") ||
+          e.target.classList.contains("blocks")
+        ) {
+          stackContainer.removeChild(e.target);
+          updateResult();
+        }
+      });
+
+      function updateResult() {
+        document.getElementById("Empty").textContent = `Empty: ${isEmpty(
+          stackContainer
+        )}`;
+        document.getElementById("count").textContent = `Count: ${count(
+          stackContainer
+        )}`;
+        document.getElementById("isFull").textContent = `Is Full: ${isFull(
+          stackContainer,
+          maxBlocks
+        )}`;
+        document.getElementById("peek").textContent = `Peek: ${peek(
+          stackContainer
+        )}`;
+      }
+     
+      // เริ่มต้นการตรวจจับการเปลี่ยนแปลง
+      observer.observe(stackContainer, config);
+      updateResult(); // เรียกใช้งานครั้งแรก
+    </script>
+  </body>
+</html>

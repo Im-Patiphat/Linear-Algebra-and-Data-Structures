@@ -1,0 +1,60 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    text-align: center;
+}
+
+h1 {
+    color: #333;
+}
+
+#customerName {
+    margin-bottom: 10px;
+    padding: 8px;
+}
+
+#enqueueBtn, #dequeueBtn {
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 5px;
+}
+
+#enqueueBtn:hover, #dequeueBtn:hover {
+    background-color: #45a049;
+}
+
+#queueList {
+    margin-top: 20px;
+    border-top: 1px solid #ddd;
+    padding-top: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+#queueList h3 {
+    width: 100%;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+#queueList p {
+    width: 100px;
+    height: 100px;
+    border: 2px solid #000;
+    border-radius: 50%;
+    padding: 10px;
+    margin: 5px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;    
+    background-color: aqua;
+}
+
+
